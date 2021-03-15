@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div>
-      <b-navbar toggleable="sm" type="light" variant="light">
+      <b-navbar toggleable="sm" type="dark" variant="dark">
         <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
 
         <b-navbar-brand>Tenacity</b-navbar-brand>
@@ -18,7 +18,7 @@
     <router-view/>
     <v-footer padless>
       <div class="footer">
-        <p>Designed and built by Cameron Molen. Currently work in progress.</p>
+        <p>Designed and built by Cameron Molen. Currently a work in progress.</p>
         <a href="https://github.com/cameronmolen/creative-project-3" target="_blank">GitHub</a>
       </div>
     </v-footer>
@@ -35,9 +35,9 @@ body {
   margin: 50px 100px;
 }
 
-a:link, a:visited, a:hover {
+a:link, a:visited {
   text-decoration: none;
-  color: #999999;
+  color: #264653;
 }
 
 #app {
@@ -58,4 +58,10 @@ a:link, a:visited, a:hover {
   background-color: #EFEFEF;
   box-shadow: 0 50vh 0 50vh #EFEFEF;
 }
+</style>
+
+<style scoped>
+ .navbar.navbar-dark.bg-dark{
+    background-color: #264653!important;
+ }
 </style>
