@@ -7,7 +7,7 @@
         <div class="timeline-content-left">
           <h3>June 2019</h3>
           <p>Returned home from my two-year missionary service and realized how having accountability
-          partners helped me achieve my goal to avoid junk food. Check out <a href="story.html">my story</a>.</p>
+          partners helped me achieve my goal to avoid junk food. Check out <router-link to="/story">my story</router-link>.</p>
         </div>
         <div class="timeline-content-right">
           <h3>December 2019</h3>
