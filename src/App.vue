@@ -40,6 +40,15 @@ a:link, a:visited {
   color: #264653;
 }
 
+a:link {
+  color: #F4A261;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #E76F51;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

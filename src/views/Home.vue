@@ -59,28 +59,19 @@ export default {
 }
 
 .btn, .btn:link {
-  color: #E9C46A;
-  border: 1px solid #E9C46A;
+  color: #E9C46A !important;
+  border: 1px solid #E9C46A !important;
 }
 
 .btn:hover {
-  color: #264653;
-  background-color: #E9C46A;
-  border: 1px solid #E9C46A;
+  color: #264653 !important;
+  background-color: #E9C46A !important;
+  border: 1px solid #E9C46A !important;
 }
 
 .btn:active {
   background-color: #E9C46A !important;
   color: #264653 !important;
-}
-
-a:link {
-  color: #F4A261;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #E76F51;
 }
 
 @media only screen and (min-width: 961px) {
