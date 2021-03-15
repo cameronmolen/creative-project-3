@@ -26,6 +26,10 @@
     </div>
     <router-view/>
   </div>
+  <footer>
+    <p>Designed and built by Cameron Molen. Currently work in progress.</p>
+    <a href="https://github.com/cameronmolen/creative-project-3">GitHub</a>
+  </footer>
 </template>
 
 <style>
