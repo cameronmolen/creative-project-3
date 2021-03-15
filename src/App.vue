@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div>
       <b-navbar toggleable="sm" type="light" variant="light">
         <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
 
@@ -9,23 +9,26 @@
         <b-collapse id="nav-text-collapse" is-nav>
           <b-navbar-nav>
             <b-nav-item to="/">Home</b-nav-item>
+            <b-nav-item to="/timeline">Timeline</b-nav-item>
+            <b-nav-item to="/story">Tenacity's Story</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
     </div>
     <router-view/>
-    <footerComponent>
+    <v-footer padless>
       <div class="footer">
         <p>Designed and built by Cameron Molen. Currently work in progress.</p>
         <a href="https://github.com/cameronmolen/creative-project-3">GitHub</a>
       </div>
-    </footerComponent>
+    </v-footer>
   </div>
 </template>
 
 <style>
 * {
   box-sizing: border-box;
+  margin: 0px 0px;
 }
 
 body {
