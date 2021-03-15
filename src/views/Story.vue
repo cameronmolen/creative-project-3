@@ -42,30 +42,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.page {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  padding: 2rem 2rem;
-  line-height: 30px;
-  text-align: left;
-}
-
-@media only screen and (min-width: 961px) {
-
-  .page {
-    padding: 2rem 250px;
-    line-height: 30px;
-  }
-}
-
-@media only screen and (max-width: 960px) and (min-width: 401px) {
-
-  .page {
-    padding: 2rem 250px;
-    line-height: 30px;
-  }
-}
-</style>

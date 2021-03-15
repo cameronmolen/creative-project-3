@@ -55,7 +55,7 @@ export default {
 @media only screen and (min-width: 961px) {
 
   .page {
-    padding: 2rem 250px;
+    padding: 2rem 150px;
     line-height: 30px;
   }
 
@@ -67,9 +67,9 @@ export default {
 @media only screen and (max-width: 960px) and (min-width: 401px) {
 
   .page {
-    padding: 2rem 250px;
+    padding: 2rem 150px;
     line-height: 30px;
-  }
+  }  
 
   .timeline {
     width: 85%;
