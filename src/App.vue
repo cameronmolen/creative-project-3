@@ -19,7 +19,7 @@
     <v-footer padless>
       <div class="footer">
         <p>Designed and built by Cameron Molen. Currently work in progress.</p>
-        <a href="https://github.com/cameronmolen/creative-project-3">GitHub</a>
+        <a href="https://github.com/cameronmolen/creative-project-3" target="_blank">GitHub</a>
       </div>
     </v-footer>
   </div>
@@ -35,7 +35,7 @@ body {
   margin: 50px 100px;
 }
 
-a:link, a:visited {
+a:link, a:visited, a:hover {
   text-decoration: none;
   color: #999999;
 }
@@ -48,25 +48,13 @@ a:link, a:visited {
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
 .footer {
   width: 90%;
+  text-align: left;
   justify-content: center;
   flex-direction: column;
   color: #999999;
-  padding: 25px 0px;
+  padding: 35px 50px;
   background-color: #EFEFEF;
   box-shadow: 0 50vh 0 50vh #EFEFEF;
 }
