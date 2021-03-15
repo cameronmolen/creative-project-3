@@ -1,7 +1,27 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #264653;">
+        <router-link class="navbar-brand" to="/">Tenacity</router-link>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <router-link class="nav-item nav-link" to="/">Home</router-link>
+            <router-link class="nav-item nav-link" to="/">Timeline</router-link>
+            <router-link class="nav-item nav-link" to="/">Tenacity's Story</router-link>
+          </div>
+          <div class="navbar-nav">
+            <nav class="navbar navbar-light" style="padding-left: 0px;">
+              <form class="form-inline">
+                <router-link class="btn btn-outline-success" to="/">Download</router-link>
+              </form>
+            </nav>
+          </div>
+        </div>
+      </nav>
+      <router-link to="/">Tenacity</router-link> |
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
