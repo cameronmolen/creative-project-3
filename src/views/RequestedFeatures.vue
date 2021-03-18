@@ -2,7 +2,7 @@
   <div class="features">
     <div class="page">
       <h1>Requested Features</h1>
-      <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but who knows!</p>
+      <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but all ideas are welcome!</p>
       <form v-on:submit.prevent="makeRequest">
         <p><input v-model="addedTitle" placeholder="Request Title"></p>
         <textarea v-model="addedRequest"></textarea>
@@ -18,18 +18,24 @@
 import RequestedFeaturesList from "../components/RequestedFeaturesList.vue"
 export default {
   name: 'RequestedFeatuers',
+  data() {
+    return {
+      addedTitle: '',
+      addedRequest: ''
+    }
+  },
   components: {
     RequestedFeaturesList
   },
   methods: {
     makeRequest() {
-      if(this.addedTitle != '' && this.addedRequest != '') {
+      if(this.addedTitle != "" && this.addedRequest != "") {
         this.$root.$data.requests.push({
           title: this.addedTitle,
           request: this.addedRequest
         });
-        this.addedTitle = '';
-        this.addedRequest = '';
+        this.addedTitle = "";
+        this.addedRequest = "";
       }
     }
   },
