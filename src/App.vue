@@ -11,6 +11,7 @@
             <b-nav-item to="/">Home</b-nav-item>
             <b-nav-item to="/timeline">Timeline</b-nav-item>
             <b-nav-item to="/story">Tenacity's Story</b-nav-item>
+            <b-nav-item to="/requested-features">Requested Features</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>

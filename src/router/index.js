@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Timeline from '../views/Timeline.vue'
 import Story from '../views/Story.vue'
+import RequestedFeatures from '../views/RequestedFeatures.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/story',
     name: 'Story',
     component: Story
+  },
+  {
+    path: '/requested-features',
+    name: 'Requested Features',
+    component: RequestedFeatures
   }
 ]
 
