@@ -4,7 +4,7 @@
       <h1>Requested Features</h1>
       <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but who knows!</p>
       <form v-on:submit.prevent="makeRequest">
-        <input v-model="addedTitle" placeholder="Request Title"></p>
+        <p><input v-model="addedTitle" placeholder="Request Title"></p>
         <textarea v-model="addedRequest"></textarea>
         <br />
         <button type="submit">Submit Request</button>
@@ -23,12 +23,14 @@ export default {
   },
   methods: {
     makeRequest() {
-      this.$root.$data.requests.push({
-        title: this.addedTitle,
-        request: this.addedRequest
-      });
-      this.addedTitle = '';
-      this.addedRequest = '';
+      if(this.addedTitle != '' && this.addedRequest != '') {
+        this.$root.$data.requests.push({
+          title: this.addedTitle,
+          request: this.addedRequest
+        });
+        this.addedTitle = '';
+        this.addedRequest = '';
+      }
     }
   },
   computed: {
@@ -38,3 +40,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+input {
+  width: 80%;
+}
+
+textarea {
+  width: 80%;
+}
+
+</style>
