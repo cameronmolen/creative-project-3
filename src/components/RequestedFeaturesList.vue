@@ -5,7 +5,16 @@
       <div class="info">
         <h3>{{request.title}}</h3>
         <p>{{request.request}}</p>
-        <p><button class="auto" v-on:click="deleteRequest(request)">Remove</button></p>
+        <div class="info-buttons">
+          <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
+          <div v-if="!editing">
+            <button class="auto" v-on:click="editRequest(request)">Edit</button>
+          </div>
+          <div v-else>
+            <input type="text" v-model="updatedRequest">
+            <button class="auto" v-on:click="finishEditing(request, updatedRequest)">Save Edits</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -18,10 +27,23 @@ export default {
   props: {
     requests: Array
   },
+  data() {
+    return {
+      editing: false
+    }
+  },
   methods: {
     deleteRequest(request) {
       const index = this.$root.$data.requests.indexOf(request);
       this.$root.$data.requests.splice(index, 1);
+    },
+    editRequest() {
+      this.editing = true;
+    },
+    finishEditing(request, updatedRequest) {
+      this.editing = false;
+      let index = this.$root.$data.requests.indexOf(request);
+      this.$root.$data.requests[index].request = updatedRequest;
     }
   }
 }
@@ -30,6 +52,12 @@ export default {
 <style scoped>
 button {
   margin-top: 15px;
+}
+
+.info-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
 }
 
 .wrapper {
@@ -69,7 +97,6 @@ button {
 }
 
 .auto {
-  margin-left: auto;
+  margin-right: 15px;
 }
-
 </style>

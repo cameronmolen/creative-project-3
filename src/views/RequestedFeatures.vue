@@ -7,7 +7,9 @@
         <p><input v-model="addedTitle" placeholder="Request Title"></p>
         <textarea v-model="addedRequest"></textarea>
         <br />
-        <button type="submit">Submit Request</button>
+        <div>
+          <button type="submit">Submit Request</button>
+        </div>
       </form>
       <RequestedFeaturesList :requests="requests" />
     </div>
@@ -25,7 +27,7 @@ export default {
     }
   },
   components: {
-    RequestedFeaturesList
+    RequestedFeaturesList,
   },
   methods: {
     makeRequest() {
