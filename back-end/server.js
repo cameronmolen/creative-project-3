@@ -39,4 +39,15 @@ const commentSchema = new mongoose.Schema({
 
 const Comment = mongoose.model('Comment', commentSchema);
 
+// Get a list of all feature requests
+app.get('/api/requests', async (req, res) => {
+  try {
+    let requests = await Request.find();
+    res.send(requests);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => console.log('Server listening on port 3000!'));
