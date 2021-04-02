@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import RequestedFeaturesList from "../components/RequestedFeaturesList.vue"
+import RequestedFeaturesList from "../components/RequestedFeaturesList.vue";
+import axios from 'axios';
 export default {
   name: 'RequestedFeatuers',
   data() {
