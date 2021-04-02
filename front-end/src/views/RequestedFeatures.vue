@@ -4,9 +4,9 @@
       <h1>Requested Features</h1>
       <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but all ideas are welcome!</p>
       <form v-on:submit.prevent="addRequest">
-        <p><input v-model="addedTitle" placeholder="Request Title"></p>
-        <textarea v-model="addedContent"></textarea>
         <p><input v-model="addedUser" placeholder="Username"></p>
+        <p><input v-model="addedTitle" placeholder="Request Title"></p>
+        <textarea v-model="addedContent" placeholder="Request Description"></textarea>
         <br />
         <div>
           <button type="submit">Submit Request</button>
@@ -20,7 +20,7 @@
             <div class="info">
               <h3>{{request.title}}</h3>
               <p>{{request.content}}</p>
-              <p>{{request.user}}</p>
+              <p style="text-align: right"><em>-- {{request.user}}</em></p>
               <div class="info-buttons">
                 <div v-if="!editing">
                   TODO: <button class="auto" v-on:click="addComment(request)">Add Comment</button>
@@ -29,7 +29,8 @@
                 </div>
                 <div v-else>
                   <input type="text" v-model="updatedRequest">
-                  <button class="auto" v-on:click="finishEditing(request, updatedRequest)">Save Edits</button>
+                  <button class="auto" v-on:click="editRequest">Cancel</button>
+                  <button class="auto" v-on:click="updateRequest(request, updatedRequest)">Save Edits</button>
                 </div>
               </div>
             </div>
@@ -97,12 +98,19 @@ export default {
       }
     },
     editRequest() {
-      this.editing = true;
+      this.editing = !this.editing;
     },
-    finishEditing(request, updatedRequest) {
+    async updateRequest(request, updatedRequest) {
       this.editing = false;
-      let index = this.$root.$data.requests.indexOf(request);
-      this.$root.$data.requests[index].request = updatedRequest;
+      try {
+        await axios.put("/api/requests/" + request._id, {
+          content: updatedRequest,
+        });
+        this.getRequests();
+        return true;
+      } catch(error) {
+        console.log(error);
+      }
     }
     /* End requested features list methods */
   },

@@ -79,4 +79,19 @@ app.delete("/api/requests/:id", async (req, res) => {
   }
 });
 
+// Updates a feature request
+app.put("/api/requests/:id", async (req, res) => {
+  try {
+    let request = await Request.findOne({
+      _id: req.params.id,
+    });
+    request.content = req.body.content;
+    await request.save();
+    res.send(request);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => console.log('Server listening on port 3000!'));
