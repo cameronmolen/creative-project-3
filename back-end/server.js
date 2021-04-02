@@ -50,4 +50,20 @@ app.get('/api/requests', async (req, res) => {
   }
 });
 
+// Adds a feature request
+app.post('/api/requests', async (req, res) => {
+  const request = new Request({
+    title: req.body.title,
+    content: req.body.content,
+    user: req.body.user
+  });
+  try {
+    await request.save();
+    res.send(request);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => console.log('Server listening on port 3000!'));

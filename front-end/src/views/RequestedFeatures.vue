@@ -3,9 +3,10 @@
     <div class="page">
       <h1>Requested Features</h1>
       <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but all ideas are welcome!</p>
-      <form v-on:submit.prevent="makeRequest">
+      <form v-on:submit.prevent="addRequest">
         <p><input v-model="addedTitle" placeholder="Request Title"></p>
-        <textarea v-model="addedRequest"></textarea>
+        <textarea v-model="addedContent"></textarea>
+        <p><input v-model="addedUser" placeholder="Username"></p>
         <br />
         <div>
           <button type="submit">Submit Request</button>
@@ -18,11 +19,13 @@
 
             <div class="info">
               <h3>{{request.title}}</h3>
-              <p>{{request.request}}</p>
+              <p>{{request.content}}</p>
+              <p>{{request.user}}</p>
               <div class="info-buttons">
-                <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
                 <div v-if="!editing">
+                  /*TODO: <button class="auto" v-on:click="addComment(request)">Add Comment</button>*/
                   <button class="auto" v-on:click="editRequest(request)">Edit</button>
+                  <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
                 </div>
                 <div v-else>
                   <input type="text" v-model="updatedRequest">
@@ -31,8 +34,11 @@
               </div>
             </div>
 
-            <div class="comment" v-for="comment in comments" :key="comment.id">
-              <p>{{comment.}}
+            <div class="comment" v-for="comment in comments" :key="comment._id">
+              <p>{{comment.content}}</p>
+              </p>{{comment.user}}</p>
+              /* TODO: Add an edit button for comments */
+              /* TODO: Add a delete button for comments */
             </div>
 
           </div>
@@ -50,7 +56,8 @@ export default {
   data() {
     return {
       addedTitle: '',
-      addedRequest: ''
+      addedContent: '',
+      addedUser: '',
       requests: [],
       editing: false,
     }
@@ -67,7 +74,18 @@ export default {
         console.log(error);
       }
     },
-    makeRequest() {
+    async addRequest() {
+      try {
+        await axios.post("/api/requests", {
+          title: this.addedTitle,
+          content: this.addedContent,
+          user: this.addedUser
+        });
+        await this.getRequests();
+      } catch(error) {
+        console.log(error);
+      }
+
       if(this.addedTitle != "" && this.addedRequest != "") {
         this.$root.$data.requests.push({
           title: this.addedTitle,
