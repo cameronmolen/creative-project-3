@@ -59,6 +59,8 @@ export default {
       addedTitle: '',
       addedContent: '',
       addedUser: '',
+      addedCommentContent: '',
+      addedCommentUser: '',
       requests: [],
       editing: false,
     }
@@ -87,7 +89,6 @@ export default {
         console.log(error);
       }
     },
-    /* Begin requested features list methods */
     async deleteRequest(request) {
       try {
         await axios.delete("/api/requests/" + request._id);
@@ -111,8 +112,28 @@ export default {
       } catch(error) {
         console.log(error);
       }
+    },
+    async getComments(request) {
+      try {
+        const response = axios.get("/api/requests/${request._id}/comments");
+        /* When should this be called? Should Request be modified to have an array of Comments? */
+      } catch(error) {
+        console.log(error);
+      }
     }
-    /* End requested features list methods */
+    async addComment(request) {
+      try {
+        await axios.post("/api/requests/${request._id}/comments", {
+          content: this.addedCommentContent,
+          user: this.addedCommentUser,
+        });
+        this.addedCommentContent = "";
+        this.addedCommentUser = "";
+        /* TODO: this.getComments(); ? */
+      } catch(error) {
+        console.log(error);
+      }
+    },
   },
 }
 </script>
