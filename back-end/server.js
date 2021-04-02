@@ -32,7 +32,7 @@ const commentSchema = new mongoose.Schema({
   request: {
     type: mongoose.Schema.ObjectId,
     ref: 'Request'
-  }
+  },
   user: String,
   content: String
 });
@@ -62,6 +62,19 @@ app.post('/api/requests', async (req, res) => {
     res.send(request);
   } catch(error) {
     console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+// Deletes a feature request
+app.delete("/api/requests/:id", async (req, res) => {
+  try {
+    await Request.deleteOne({
+      _id: req.params.id
+    });
+    res.sendStatus(200);
+  } catch(error) {
+    console.log(error)
     res.sendStatus(500);
   }
 });

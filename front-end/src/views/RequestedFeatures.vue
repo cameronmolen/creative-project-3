@@ -23,7 +23,7 @@
               <p>{{request.user}}</p>
               <div class="info-buttons">
                 <div v-if="!editing">
-                  /*TODO: <button class="auto" v-on:click="addComment(request)">Add Comment</button>*/
+                  TODO: <button class="auto" v-on:click="addComment(request)">Add Comment</button>
                   <button class="auto" v-on:click="editRequest(request)">Edit</button>
                   <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
                 </div>
@@ -36,7 +36,7 @@
 
             <div class="comment" v-for="comment in comments" :key="comment._id">
               <p>{{comment.content}}</p>
-              </p>{{comment.user}}</p>
+              <p>{{comment.user}}</p>
               /* TODO: Add an edit button for comments */
               /* TODO: Add a delete button for comments */
             </div>
@@ -64,7 +64,7 @@ export default {
   },
   created() {
     this.getRequests();
-  }
+  },
   methods: {
     async getRequests() {
       try {
@@ -85,20 +85,16 @@ export default {
       } catch(error) {
         console.log(error);
       }
-
-      if(this.addedTitle != "" && this.addedRequest != "") {
-        this.$root.$data.requests.push({
-          title: this.addedTitle,
-          request: this.addedRequest
-        });
-        this.addedTitle = "";
-        this.addedRequest = "";
-      }
     },
     /* Begin requested features list methods */
-    deleteRequest(request) {
-      const index = this.$root.$data.requests.indexOf(request);
-      this.$root.$data.requests.splice(index, 1);
+    async deleteRequest(request) {
+      try {
+        await axios.delete("/api/requests/" + request._id);
+        this.getRequests();
+        return true;
+      } catch(error) {
+        console.log(error);
+      }
     },
     editRequest() {
       this.editing = true;
@@ -110,11 +106,6 @@ export default {
     }
     /* End requested features list methods */
   },
-  computed: {
-    requests() {
-      return this.$root.$data.requests;
-    }
-  }
 }
 </script>
 
