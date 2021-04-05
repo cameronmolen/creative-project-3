@@ -22,15 +22,28 @@
               <p>{{request.content}}</p>
               <p style="text-align: right"><em>-- {{request.user}}</em></p>
               <div class="info-buttons">
-                <div v-if="!editingRequest">
-                  <button class="auto" v-on:click="addComment(request)">Add Comment</button>
-                  <button class="auto" v-on:click="editRequest(request)">Edit</button>
-                  <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
+                <div v-if="!addingComment">
+                  <div v-if="!editingRequest">
+                    <button class="auto" v-on:click="showCommentCreator()">Add Comment</button>
+                    <button class="auto" v-on:click="editRequest(request)">Edit</button>
+                    <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
+                  </div>
+                  <div v-else>
+                    <input type="text" v-model="updatedRequest">
+                    <button class="auto" v-on:click="editRequest">Cancel</button>
+                    <button class="auto" v-on:click="updateRequest(request, updatedRequest)">Save Edits</button>
+                  </div>
                 </div>
                 <div v-else>
-                  <input type="text" v-model="updatedRequest">
-                  <button class="auto" v-on:click="editRequest">Cancel</button>
-                  <button class="auto" v-on:click="updateRequest(request, updatedRequest)">Save Edits</button>
+                  <form v-on:submit.prevent="addComment(request)">
+                    <p><input v-model="addedCommentUser" placeholder="Username"></p>
+                    <p><input v-model="addedCommentContent" placeholder="Comment Content"></p>
+                    <br />
+                    <div>
+                      <button class="auto" type="submit">Make Comment</button>
+                      <button class="auto" v-on:click="showCommentCreator()">Cancel</button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -63,6 +76,7 @@ export default {
       addedCommentUser: '',
       requests: [],
       editingRequest: false,
+      addingComment: false,
     }
   },
   created() {
@@ -114,6 +128,11 @@ export default {
         console.log(error);
       }
     },
+    showCommentCreator() {
+      this.addedCommentUser = "";
+      this.addedCommentContent = "";
+      this.addingComment = !this.addingComment;
+    },
     async getComments(request) {
       try {
         const response = await axios.get("/api/requests/${request._id}/comments");
@@ -122,7 +141,7 @@ export default {
         console.log(error);
       }
     },
-    async addComment(request) {
+    async addComment() { /* TODO: Might need to pass request as a parameter */
       try {
         await axios.post("/api/requests/${request._id}/comments", {
           content: this.addedCommentContent,
