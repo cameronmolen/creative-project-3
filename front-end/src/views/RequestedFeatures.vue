@@ -22,8 +22,8 @@
               <p>{{request.content}}</p>
               <p style="text-align: right"><em>-- {{request.user}}</em></p>
               <div class="info-buttons">
-                <div v-if="!editing">
-                  TODO: <button class="auto" v-on:click="addComment(request)">Add Comment</button>
+                <div v-if="!editingRequest">
+                  <button class="auto" v-on:click="addComment(request)">Add Comment</button>
                   <button class="auto" v-on:click="editRequest(request)">Edit</button>
                   <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
                 </div>
@@ -35,7 +35,7 @@
               </div>
             </div>
 
-            <div class="comment" v-for="comment in comments" :key="comment._id">
+            <div class="comment" v-for="comment in request.comments" :key="comment._id">
               <p>{{comment.content}}</p>
               <p>{{comment.user}}</p>
               /* TODO: Add an edit button for comments */
@@ -62,7 +62,7 @@ export default {
       addedCommentContent: '',
       addedCommentUser: '',
       requests: [],
-      editing: false,
+      editingRequest: false,
     }
   },
   created() {
@@ -82,7 +82,8 @@ export default {
         await axios.post("/api/requests", {
           title: this.addedTitle,
           content: this.addedContent,
-          user: this.addedUser
+          user: this.addedUser,
+          comments: []
         });
         await this.getRequests();
       } catch(error) {
@@ -99,7 +100,7 @@ export default {
       }
     },
     editRequest() {
-      this.editing = !this.editing;
+      this.editingRequest = !this.editingRequest;
     },
     async updateRequest(request, updatedRequest) {
       this.editing = false;
@@ -115,12 +116,12 @@ export default {
     },
     async getComments(request) {
       try {
-        const response = axios.get("/api/requests/${request._id}/comments");
-        /* When should this be called? Should Request be modified to have an array of Comments? */
+        const response = await axios.get("/api/requests/${request._id}/comments");
+        request.comments = response.data;
       } catch(error) {
         console.log(error);
       }
-    }
+    },
     async addComment(request) {
       try {
         await axios.post("/api/requests/${request._id}/comments", {
@@ -129,7 +130,7 @@ export default {
         });
         this.addedCommentContent = "";
         this.addedCommentUser = "";
-        /* TODO: this.getComments(); ? */
+        await this.getComments();
       } catch(error) {
         console.log(error);
       }

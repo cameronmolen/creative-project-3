@@ -22,7 +22,8 @@ mongoose.connect('mongodb://localhost:27017/tenacity', {
 const requestSchema = new mongoose.Schema({
   title: String,
   content: String,
-  user: String
+  user: String,
+  comments: [{type: mongoose.Schema.ObjectId, ref: 'Comment'}]
 });
 
 const Request = mongoose.model('Request', requestSchema);
@@ -88,6 +89,46 @@ app.put("/api/requests/:id", async (req, res) => {
     request.content = req.body.content;
     await request.save();
     res.send(request);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+// Adds a comment to a given request
+app.post('/api/requests/:requestId/comments', async (req, res) => {
+  try {
+    console.log("Looking for request...");
+    let request = await Request.findOne({_id: req.params.requestId});
+    console.log("Finds request");
+    if(!request) {
+      res.send(404);
+      return;
+    }
+    let comment = new Comment({
+      request: request,
+      user: req.body.user,
+      content: req.body.content,
+    });
+    await comment.save();
+    res.send(comment);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+
+// Gets all comments for a given request
+app.get('/api/requests/:requestId/comments', async (req, res) => {
+  try {
+    let request = await Request.findOne({_id: req.params.requestId});
+    if(!request) {
+      res.send(404);
+      return;
+    }
+    let comments = await Comment.find({request:request});
+    res.send(comments);
   } catch(error) {
     console.log(error);
     res.sendStatus(500);
