@@ -96,13 +96,12 @@ app.put("/api/requests/:id", async (req, res) => {
 });
 
 // Adds a comment to a given request
-app.post('/api/requests/:requestId/comments', async (req, res) => {
+app.post('/api/requests/:id/comments', async (req, res) => {
   try {
-    console.log("Looking for request...");
-    let request = await Request.findOne({_id: req.params.requestId});
-    console.log("Finds request");
+    console.log("POST id: " + req.params.id);
+    let request = await Request.findOne({_id: req.params.id});
     if(!request) {
-      res.send(404);
+      res.sendStatus(404);
       return;
     }
     let comment = new Comment({
@@ -118,13 +117,13 @@ app.post('/api/requests/:requestId/comments', async (req, res) => {
   }
 });
 
-
 // Gets all comments for a given request
-app.get('/api/requests/:requestId/comments', async (req, res) => {
+app.get('/api/requests/:id/comments', async (req, res) => {
   try {
-    let request = await Request.findOne({_id: req.params.requestId});
+    console.log("GET id: " + req.params.id);
+    let request = await Request.findOne({_id: req.params.id});
     if(!request) {
-      res.send(404);
+      res.sendStatus(404);
       return;
     }
     let comments = await Comment.find({request:request});

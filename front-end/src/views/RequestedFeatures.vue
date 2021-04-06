@@ -135,21 +135,21 @@ export default {
     },
     async getComments(request) {
       try {
-        const response = await axios.get("/api/requests/${request._id}/comments");
+        const response = await axios.get("/api/requests/" + request._id + "/comments");
         request.comments = response.data;
       } catch(error) {
         console.log(error);
       }
     },
-    async addComment() { /* TODO: Might need to pass request as a parameter */
+    async addComment(request) {
       try {
-        await axios.post("/api/requests/${request._id}/comments", {
+        await axios.post("/api/requests/" + request._id + "/comments", {
           content: this.addedCommentContent,
           user: this.addedCommentUser,
         });
         this.addedCommentContent = "";
         this.addedCommentUser = "";
-        await this.getComments();
+        await this.getComments(request);
       } catch(error) {
         console.log(error);
       }
