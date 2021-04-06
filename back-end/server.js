@@ -98,7 +98,6 @@ app.put("/api/requests/:id", async (req, res) => {
 // Adds a comment to a given request
 app.post('/api/requests/:id/comments', async (req, res) => {
   try {
-    console.log("POST id: " + req.params.id);
     let request = await Request.findOne({_id: req.params.id});
     if(!request) {
       res.sendStatus(404);
@@ -120,7 +119,6 @@ app.post('/api/requests/:id/comments', async (req, res) => {
 // Gets all comments for a given request
 app.get('/api/requests/:id/comments', async (req, res) => {
   try {
-    console.log("GET id: " + req.params.id);
     let request = await Request.findOne({_id: req.params.id});
     if(!request) {
       res.sendStatus(404);
@@ -128,6 +126,23 @@ app.get('/api/requests/:id/comments', async (req, res) => {
     }
     let comments = await Comment.find({request:request});
     res.send(comments);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+// Updates a comment
+app.put("/api/requests/:requestId/comments/:commentId", async (req, res) => {
+  try {
+    let comment = await Comment.findOne({_id: req.params.commentId, request: req.params.requestId});
+    if(!comment) {
+      res.sendStatus(404);
+      return;
+    }
+    comment.content = req.body.content;
+    await comment.save();
+    res.send(comment);
   } catch(error) {
     console.log(error);
     res.sendStatus(500);

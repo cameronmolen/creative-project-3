@@ -48,11 +48,11 @@
               </div>
             </div>
 
-            <div class="comment" v-for="comment in request.comments" :key="comment._id">
+            <div class="info comment" v-for="comment in request.comments" :key="comment._id">
               <p>{{comment.content}}</p>
-              <p>{{comment.user}}</p>
-              /* TODO: Add an edit button for comments */
-              /* TODO: Add a delete button for comments */
+              <p style="text-align: right"><em>-- {{comment.user}}</em></p>
+              <button class="auto" v-on:click="editComment(request, comment, '')">Edit</button>
+              <button class="auto" v-on:click="deleteComment()">Remove</button>
             </div>
 
           </div>
@@ -79,8 +79,15 @@ export default {
       addingComment: false,
     }
   },
-  created() {
-    this.getRequests();
+  async created() {
+    try {
+      await this.getRequests();
+      for(let i = 0; i < this.requests.length; i++) {
+        this.getComments(this.requests[i]);
+      }
+    } catch(error) {
+      console.log(error)
+    }
   },
   methods: {
     async getRequests() {
@@ -154,6 +161,23 @@ export default {
         console.log(error);
       }
     },
+    async editComment(request, comment, updatedContent) {
+      try {
+        axios.put("/api/requests/${request._id}/comments/${comment._id}", {
+          content: updatedContent,
+        });
+        this.getComments(request);
+      } catch(error) {
+        console.log(error);
+      }
+    },
+    async deleteComment() {
+      try {
+        console.log("Yay");
+      } catch(error) {
+        console.log(error);
+      }
+    },
   },
 }
 </script>
@@ -208,6 +232,12 @@ button {
 
 .info p {
   margin: 0px;
+}
+
+.comment {
+  background: #EEEFFF;
+  margin: 0 auto;
+  border-top: 1px solid black;
 }
 
 .price {
