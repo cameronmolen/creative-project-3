@@ -22,23 +22,23 @@
               <p>{{request.content}}</p>
               <p style="text-align: right"><em>-- {{request.user}}</em></p>
               <div class="info-buttons">
-                <div v-if="!addingComment">
-                  <div v-if="!editingRequest">
+                <div v-if="!addingComment" style="width: 100%;">
+                  <div v-if="!editingRequest" style="width: 100%;">
                     <button class="auto" v-on:click="showCommentCreator()">Add Comment</button>
                     <button class="auto" v-on:click="editRequest(request)">Edit</button>
                     <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
                   </div>
-                  <div v-else>
-                    <input type="text" v-model="updatedRequest">
+                  <div v-else style="width: 100%;">
+                    <input style="width: 100%;" type="text" v-model="updatedRequest">
                     <button class="auto" v-on:click="editRequest">Cancel</button>
                     <button class="auto" v-on:click="updateRequest(request, updatedRequest)">Save Edits</button>
                   </div>
                 </div>
-                <div v-else>
+                <div v-else style="width: 100%;">
                   <form v-on:submit.prevent="addComment(request)">
-                    <p><input v-model="addedCommentUser" placeholder="Username"></p>
-                    <p><input v-model="addedCommentContent" placeholder="Comment Content"></p>
-                    <br />
+                    <p><input style="width: 100%;" v-model="addedCommentUser" placeholder="Username"></p>
+                    <p><input style="width: 100%;" v-model="addedCommentContent" placeholder="Comment Content"></p>
+                    <br/>
                     <div>
                       <button class="auto" type="submit">Make Comment</button>
                       <button class="auto" v-on:click="showCommentCreator()">Cancel</button>
@@ -51,8 +51,16 @@
             <div class="info comment" v-for="comment in request.comments" :key="comment._id">
               <p>{{comment.content}}</p>
               <p style="text-align: right"><em>-- {{comment.user}}</em></p>
-              <button class="auto" v-on:click="editComment(request, comment, 'This is a test comment')">Edit</button>
-              <button class="auto" v-on:click="deleteComment(request, comment)">Remove</button>
+              <div v-if="!editingComment">
+                <button class="auto" v-on:click="editComment()">Edit</button>
+                <button class="auto" v-on:click="deleteComment(request, comment)">Remove</button>
+              </div>
+              <div v-else style="width: 100%;">
+                <input style="width: 100%;" type="text" v-model="updatedComment">
+                <br/>
+                <button class="auto" v-on:click="editComment">Cancel</button>
+                <button class="auto" v-on:click="updateComment(request, comment, updatedComment)">Save Edits</button>
+              </div>
             </div>
 
           </div>
@@ -77,6 +85,7 @@ export default {
       requests: [],
       editingRequest: false,
       addingComment: false,
+      editingComment: false,
     }
   },
   async created() {
@@ -106,6 +115,9 @@ export default {
           user: this.addedUser,
           comments: []
         });
+        this.addedUser = "";
+        this.addedTitle = "";
+        this.addedContent = "";
         await this.getRequests();
       } catch(error) {
         console.log(error);
@@ -159,16 +171,21 @@ export default {
         });
         this.addedCommentContent = "";
         this.addedCommentUser = "";
+        this.addingComment = false;
         await this.getComments(request);
       } catch(error) {
         console.log(error);
       }
     },
-    async editComment(request, comment, updatedContent) {
+    editComment() {
+      this.editingComment = !this.editingComment;
+    },
+    async updateComment(request, comment, updatedContent) {
       try {
         axios.put('/api/requests/' + request._id + '/comments/' + comment._id, {
           content: updatedContent,
         });
+        this.updatedComment = "";
         this.getComments(request);
       } catch(error) {
         console.log(error);
