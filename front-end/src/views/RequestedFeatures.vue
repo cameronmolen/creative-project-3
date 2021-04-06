@@ -51,8 +51,8 @@
             <div class="info comment" v-for="comment in request.comments" :key="comment._id">
               <p>{{comment.content}}</p>
               <p style="text-align: right"><em>-- {{comment.user}}</em></p>
-              <button class="auto" v-on:click="editComment(request, comment, '')">Edit</button>
-              <button class="auto" v-on:click="deleteComment()">Remove</button>
+              <button class="auto" v-on:click="editComment(request, comment, 'This is a test comment')">Edit</button>
+              <button class="auto" v-on:click="deleteComment(request, comment)">Remove</button>
             </div>
 
           </div>
@@ -82,9 +82,6 @@ export default {
   async created() {
     try {
       await this.getRequests();
-      for(let i = 0; i < this.requests.length; i++) {
-        this.getComments(this.requests[i]);
-      }
     } catch(error) {
       console.log(error)
     }
@@ -94,6 +91,9 @@ export default {
       try {
         const response = await axios.get("/api/requests");
         this.requests = response.data;
+        for(let i = 0; i < this.requests.length; i++) {
+          this.getComments(this.requests[i]);
+        }
       } catch(error) {
         console.log(error);
       }
@@ -113,6 +113,9 @@ export default {
     },
     async deleteRequest(request) {
       try {
+        for(let i = request.comments.length - 1; i >= 0; i--) {
+          this.deleteComment(request, request.comments[i]);
+        }
         await axios.delete("/api/requests/" + request._id);
         this.getRequests();
         return true;
@@ -163,7 +166,7 @@ export default {
     },
     async editComment(request, comment, updatedContent) {
       try {
-        axios.put("/api/requests/${request._id}/comments/${comment._id}", {
+        axios.put('/api/requests/' + request._id + '/comments/' + comment._id, {
           content: updatedContent,
         });
         this.getComments(request);
@@ -171,9 +174,10 @@ export default {
         console.log(error);
       }
     },
-    async deleteComment() {
+    async deleteComment(request, comment) {
       try {
-        console.log("Yay");
+        await axios.delete('/api/requests/' + request._id + '/comments/' + comment._id);
+        this.getComments(request);
       } catch(error) {
         console.log(error);
       }

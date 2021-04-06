@@ -149,4 +149,20 @@ app.put("/api/requests/:requestId/comments/:commentId", async (req, res) => {
   }
 });
 
+// Deletes a comment
+app.delete("/api/requests/:requestId/comments/:commentId", async (req, res) => {
+  try {
+    let comment = await Comment.findOne({_id: req.params.commentId, request: req.params.requestId});
+    if(!comment) {
+      res.sendStatus(404);
+      return;
+    }
+    await comment.delete();
+    res.sendStatus(200);
+  } catch(error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => console.log('Server listening on port 3000!'));
