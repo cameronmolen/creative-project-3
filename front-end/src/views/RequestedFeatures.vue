@@ -1,5 +1,6 @@
 <template>
-  <div class="features">
+<div>
+  <div class="features" v-if="user">
     <div class="page">
       <h1>Requested Features</h1>
       <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but all ideas are welcome!</p>
@@ -69,12 +70,18 @@
       </div>
     </div>
   </div>
+  <Login v-else />
+</div>
 </template>
 
 <script>
 import axios from 'axios';
+import Login from '@/components/Login.vue';
 export default {
   name: 'RequestedFeatuers',
+  components: {
+    Login
+  },
   data() {
     return {
       addedTitle: '',
@@ -90,9 +97,18 @@ export default {
   },
   async created() {
     try {
-      await this.getRequests();
+      let response = await axios.get('/api/users');
+      this.$root.$data.user = response.data.user;
+      if(user != null)
+        await this.getRequests();
     } catch(error) {
+      this.$root.$data.user = null;
       console.log(error)
+    }
+  },
+  computed: {
+    user() {
+      return this.$root.$data.user;
     }
   },
   methods: {
