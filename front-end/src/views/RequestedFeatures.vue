@@ -63,9 +63,8 @@
                 <button class="auto" v-on:click="updateComment(request, comment, updatedComment)">Save Edits</button>
               </div>
             </div>
-
           </div>
-
+          <button class="auto" v-on:click="logout">Logout</button>
         </div>
       </div>
     </div>
@@ -95,20 +94,20 @@ export default {
       editingComment: false,
     }
   },
+  computed: {
+    user() {
+      return this.$root.$data.user;
+    }
+  },
   async created() {
     try {
       let response = await axios.get('/api/users');
       this.$root.$data.user = response.data.user;
-      if(user != null)
+      if(this.$root.$data.user != null)
         await this.getRequests();
     } catch(error) {
       this.$root.$data.user = null;
       console.log(error)
-    }
-  },
-  computed: {
-    user() {
-      return this.$root.$data.user;
     }
   },
   methods: {
@@ -213,6 +212,14 @@ export default {
         this.getComments(request);
       } catch(error) {
         console.log(error);
+      }
+    },
+    async logout() {
+      try {
+        await axios.delete("/api/users");
+        this.$root.$data.user = null;
+      } catch (error) {
+        this.$root.$data.user = null;
       }
     },
   },

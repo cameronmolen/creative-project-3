@@ -68,9 +68,9 @@ const validUser = async (req, res, next) => {
 
 // register a new user
 router.post('/', async (req, res) => {
-  if (!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.password)
+  if (!req.body.username || !req.body.password)
     return res.status(400).send({
-      message: "first name, last name, username and password are required"
+      message: "username and password are required"
     });
 
   try {
@@ -82,8 +82,6 @@ router.post('/', async (req, res) => {
         message: "username already exists"
       });
     const user = new User({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
       username: req.body.username,
       password: req.body.password
     });

@@ -18,6 +18,21 @@ mongoose.connect('mongodb://localhost:27017/tenacity', {
   useUnifiedTopology: true
 });
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+const cookieSession = require('cookie-session');
+app.use(cookieSession({
+  name: 'session',
+  keys: [
+    'secretValue'
+  ],
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+
 // Create a scheme for feature requests
 const requestSchema = new mongoose.Schema({
   title: String,
