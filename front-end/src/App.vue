@@ -20,7 +20,7 @@
     <v-footer padless>
       <div class="footer">
         <p>Designed and built by Cameron Molen. Currently a work in progress.</p>
-        <a href="https://github.com/cameronmolen/creative-project-3" target="_blank">GitHub</a>
+        <a href="https://github.com/cameronmolen/tenacity" target="_blank">GitHub</a>
       </div>
     </v-footer>
   </div>
