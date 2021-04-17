@@ -64,7 +64,10 @@
               </div>
             </div>
           </div>
-          <button class="auto" v-on:click="logout">Logout</button>
+          <div>
+          <p>Logged in as {{user.username}}</p>
+          <button class="auto" style="margin-top:0px;" v-on:click="logout">Logout</button>
+          </div>
         </div>
       </div>
     </div>
@@ -101,10 +104,9 @@ export default {
   },
   async created() {
     try {
+      await this.getRequests();
       let response = await axios.get('/api/users');
-      this.$root.$data.user = response.data.user;
-      if(this.$root.$data.user != null)
-        await this.getRequests();
+      this.$root.$data.user = response.data.user; 
     } catch(error) {
       this.$root.$data.user = null;
       console.log(error)
