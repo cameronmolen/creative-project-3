@@ -26,13 +26,17 @@
                 <div v-if="!addingComment" style="width: 100%;">
                   <div v-if="!editingRequest" style="width: 100%;">
                     <button class="auto" v-on:click="showCommentCreator()">Add Comment</button>
-                    <button class="auto" v-on:click="editRequest(request)">Edit</button>
-                    <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
+                    <div v-if="request.user._id == user._id">
+                      <button class="auto" v-on:click="editRequest(request)">Edit</button>
+                      <button class="auto" v-on:click="deleteRequest(request)">Remove</button>
+                    </div>
                   </div>
                   <div v-else style="width: 100%;">
-                    <input style="width: 100%;" type="text" v-model="updatedRequest">
-                    <button class="auto" v-on:click="editRequest">Cancel</button>
-                    <button class="auto" v-on:click="updateRequest(request, updatedRequest)">Save Edits</button>
+                    <div v-if="request.user._id == user._id">
+                      <input style="width: 100%;" type="text" v-model="updatedRequest">
+                      <button class="auto" v-on:click="editRequest">Cancel</button>
+                      <button class="auto" v-on:click="updateRequest(request, updatedRequest)">Save Edits</button>
+                    </div>
                   </div>
                 </div>
                 <div v-else style="width: 100%;">
@@ -52,6 +56,7 @@
               <p>{{comment.content}}</p>
               <p style="text-align: right"><em>-- {{comment.user.username}}</em></p>
               <p style="text-align: right"><em>{{formatDate(comment.created)}}</em></p>
+              <div v-if="comment.user._id == user._id">
               <div v-if="!editingComment">
                 <button class="auto" v-on:click="editComment()">Edit</button>
                 <button class="auto" v-on:click="deleteComment(request, comment)">Remove</button>
@@ -61,6 +66,7 @@
                 <br/>
                 <button class="auto" v-on:click="editComment">Cancel</button>
                 <button class="auto" v-on:click="updateComment(request, comment, updatedComment)">Save Edits</button>
+              </div>
               </div>
             </div>
           </div>
@@ -105,9 +111,7 @@ export default {
     try {
       await this.getRequests();
       let response = await axios.get('/api/users');
-      console.log(response.data.user.username);
       this.$root.$data.user = response.data.user; 
-      console.log(this.$root.$data.user);
     } catch(error) {
       this.$root.$data.user = null;
       console.log(error)
@@ -156,7 +160,7 @@ export default {
       this.editingRequest = !this.editingRequest;
     },
     async updateRequest(request, updatedRequest) {
-      this.editing = false;
+      this.editingRequest = false;
       try {
         await axios.put("/api/requests/" + request._id, {
           content: updatedRequest,
@@ -173,10 +177,8 @@ export default {
     },
     async getComments(request) {
       try {
-        console.log("Here 3");
         const response = await axios.get("/api/requests/" + request._id + "/comments");
         request.comments = response.data;
-        console.log(request.comments);
       } catch(error) {
         console.log(error);
       }
