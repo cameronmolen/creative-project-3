@@ -5,7 +5,6 @@
       <h1>Requested Features</h1>
       <p>I would love to hear from you, the future users of Tenacity, what features you would like to see in the app. There is no guarantee that these ideas will be implemented into the design and functionality of Tenacity, but all ideas are welcome!</p>
       <form v-on:submit.prevent="addRequest">
-        <p><input v-model="addedUser" placeholder="Username"></p>
         <p><input v-model="addedTitle" placeholder="Request Title"></p>
         <textarea v-model="addedContent" placeholder="Request Description"></textarea>
         <br />
@@ -21,7 +20,8 @@
             <div class="info">
               <h3>{{request.title}}</h3>
               <p>{{request.content}}</p>
-              <p style="text-align: right"><em>-- {{request.user}}</em></p>
+              <p style="text-align: right;"><em>-- {{request.user.username}}</em></p>
+              <p style="text-align: right;">{{formatDate(request.created)}}</p>
               <div class="info-buttons">
                 <div v-if="!addingComment" style="width: 100%;">
                   <div v-if="!editingRequest" style="width: 100%;">
@@ -37,7 +37,6 @@
                 </div>
                 <div v-else style="width: 100%;">
                   <form v-on:submit.prevent="addComment(request)">
-                    <p><input style="width: 100%;" v-model="addedCommentUser" placeholder="Username"></p>
                     <p><input style="width: 100%;" v-model="addedCommentContent" placeholder="Comment Content"></p>
                     <br/>
                     <div>
@@ -51,7 +50,8 @@
 
             <div class="info comment" v-for="comment in request.comments" :key="comment._id">
               <p>{{comment.content}}</p>
-              <p style="text-align: right"><em>-- {{comment.user}}</em></p>
+              <p style="text-align: right"><em>-- {{comment.user.username}}</em></p>
+              <p style="text-align: right"><em>{{formatDate(comment.created)}}</em></p>
               <div v-if="!editingComment">
                 <button class="auto" v-on:click="editComment()">Edit</button>
                 <button class="auto" v-on:click="deleteComment(request, comment)">Remove</button>
@@ -65,8 +65,8 @@
             </div>
           </div>
           <div>
-          <p>Logged in as {{user.username}}</p>
-          <button class="auto" style="margin-top:0px;" v-on:click="logout">Logout</button>
+            <p>Logged in as {{user.username}}</p>
+            <button class="auto" style="margin-top:0px;" v-on:click="logout">Logout</button>
           </div>
         </div>
       </div>
@@ -78,6 +78,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 import Login from '@/components/Login.vue';
 export default {
   name: 'RequestedFeatuers',
@@ -88,9 +89,7 @@ export default {
     return {
       addedTitle: '',
       addedContent: '',
-      addedUser: '',
       addedCommentContent: '',
-      addedCommentUser: '',
       requests: [],
       editingRequest: false,
       addingComment: false,
@@ -106,7 +105,9 @@ export default {
     try {
       await this.getRequests();
       let response = await axios.get('/api/users');
+      console.log(response.data.user.username);
       this.$root.$data.user = response.data.user; 
+      console.log(this.$root.$data.user);
     } catch(error) {
       this.$root.$data.user = null;
       console.log(error)
@@ -129,10 +130,9 @@ export default {
         await axios.post("/api/requests", {
           title: this.addedTitle,
           content: this.addedContent,
-          user: this.addedUser,
+          user: this.user,
           comments: []
         });
-        this.addedUser = "";
         this.addedTitle = "";
         this.addedContent = "";
         await this.getRequests();
@@ -168,26 +168,27 @@ export default {
       }
     },
     showCommentCreator() {
-      this.addedCommentUser = "";
       this.addedCommentContent = "";
       this.addingComment = !this.addingComment;
     },
     async getComments(request) {
       try {
+        console.log("Here 3");
         const response = await axios.get("/api/requests/" + request._id + "/comments");
         request.comments = response.data;
+        console.log(request.comments);
       } catch(error) {
         console.log(error);
       }
     },
     async addComment(request) {
       try {
+        console.log("Here 4");
         await axios.post("/api/requests/" + request._id + "/comments", {
           content: this.addedCommentContent,
-          user: this.addedCommentUser,
+          user: this.user,
         });
         this.addedCommentContent = "";
-        this.addedCommentUser = "";
         this.addingComment = false;
         await this.getComments(request);
       } catch(error) {
@@ -224,6 +225,12 @@ export default {
         this.$root.$data.user = null;
       }
     },
+    formatDate(date) {
+      if (moment(date).diff(Date.now(), 'days') < 15)
+        return moment(date).fromNow();
+      else
+        return moment(date).format('d MMMM YYYY');
+    }
   },
 }
 </script>

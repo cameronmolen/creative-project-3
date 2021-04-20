@@ -146,7 +146,6 @@ router.delete("/", validUser, async (req, res) => {
   }
 });
 
-
 module.exports = {
   routes: router,
   model: User,
