@@ -153,7 +153,6 @@ app.post('/api/requests/:id/comments', validUser, async (req, res) => {
 app.get('/api/requests/:id/comments', async (req, res) => {
   try {
     let request = await Request.findOne({_id: req.params.id}).populate('user');
-    console.log("DEBUGGING: " + request);
     if(!request) {
       res.sendStatus(404);
       return;
